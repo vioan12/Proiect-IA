@@ -1,0 +1,271 @@
+
+
+% preamble
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[document]{ragged2e}
+\usepackage{ulem}
+\usepackage{amsmath}
+\usepackage{color}
+\usepackage{ragged2e}
+\usepackage{url}
+\usepackage{hyperref}
+
+\usepackage{amssymb, amsthm, amsmath, amsfonts}
+
+\usepackage{latexsym}
+\usepackage{url}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true}
+%% \usepackage{times}
+%% \usepackage{times}
+\usepackage{latexsym}
+\usepackage{url}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true}
+\usepackage{graphicx}
+\graphicspath{ {image/} }
+
+\begin{document}
+
+% top matter
+
+	\title{Inteligen\c{t}\u{a} Artificial\u{a}\\Tem\u{a} de cas\u{a}}
+	\date{\large \today} 
+	\maketitle
+	\begin{tabbing}
+	\\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\
+	\indent{\large Titlu:} \={\large Top-down proof with SLD resolution}\\ \\
+	\indent{\large Profesor universitar:} \={\large Dr. Ing. Costin B\u{a}dic\u{a}}\\ \\
+    \indent{\large Student:} \={\large Voiculescu Ioan-Valentin}\\ \\
+    \indent{\large Facultate: Automatic\u{a}, Calculatoare \c{s}i Electronic\u{a}}\\ \\
+    \indent{\large Anul: II}\\ \\
+    \indent{\large Specializarea: Calculatoare Rom\^{a}n\u{a}}\\ \\
+    \indent{\large Grupa: CR 2.2 B}\\ \\
+	\end{tabbing}
+	\newpage
+    \tableofcontents
+    \newpage
+
+% abstract
+\begin{abstract}
+Acest document prezinta obiectivele si metodologia pentru dezvoltarea temelor de Inteligenta Artificiala. Top-Down Proof Procedure este o metoda alternativa de verificare a cautarii inapoi sau de sus in jos dintr-o interogare pentru a determina daca aceasta este o consecința logica a clauzelor definite.
+\end{abstract}
+
+\section{Declaratia problemei}
+\subsection{Titlu}
+Top-down proof with SLD resolutions.
+\subsection {Introducere}
+\hspace{1em}
+\justifying
+Această procedură se numește rezoluție clauză propozitivă definită sau rezoluție SLD, în care SL reprezintă Selectarea unui atom folosind o strategie liniară, iar D reprezintă clauze definite. Este o instanță a metodei de rezoluție mai generală.
+
+Procedura de verificare de sus în jos poate fi înțeleasă în termenii clauzelor de răspuns. O clauză de răspuns este de forma:
+\begin{tabbing}
+\ $ yes \leftarrow  a_1 \wedge a_2 \wedge ... \wedge a_m   \ $ \\
+\end{tabbing} Unde yes este un atom special. Intuitiv, va fi adevărat atunci când răspunsul la interogare este "yes".
+
+Având o clauză de răspuns, algoritmul de sus în jos selectează un atom din corpul clauzei de răspuns. Să presupunem că selectează $ a_i $. Atmosul selectat este numit scop. Algoritmul continuă prin pașii de rezoluție. Într-o etapă a rezoluției, alege o clauză definită în KB cu $ a_i $ ca cap. Dacă nu există o astfel de clauză, ea nu reușește.
+
+O derivare SLD a unei interogări $ ask\ q_1\wedge ... \wedge q_k  $ din baza de cunoștințe KB este o secvență de clauze de răspuns $ y_0, y_1, ..., y_n $ astfel încât:
+
+• $ y_0 $ este clauza de răspuns corespunzătoare interogării inițiale, și anume clauza de răspuns $ yes \leftarrow q_1\wedge ... \wedge q_k $;
+
+• $ y_i $ este resolventul $ y_{i-1} $ cu o clauză definită în KB;
+
+• $ y_n $ este un răspuns.
+
+
+
+
+
+\pagebreak
+
+\section{Pseudocod al algoritmilor}
+\hspace{1em}
+\justifying
+
+O modalitate de a gândi despre algoritm este că algoritmul de sus în jos menține o colecție G de atomi ca să demonstreze. Fiecare atom care trebuie dovedit este un scop. Inițial, G este setul de atomi din interogare. O clauză $ a \leftarrow b_1 \wedge... ... \wedge b_p $ înseamnă că obiectivul a poate fi înlocuit de obiectivele $ b_1, ..., b_p $. Fiecare $b_i$ este un subgol al lui a. G care trebuie demonstrat corespunde clauzei de răspuns $ yes \leftarrow G $.
+
+O strategie comună de selecție este aceea de a selecta atomul din stânga în ordonarea atomilor. Aceasta nu este o strategie corectă; Este posibil ca aceasta să intre într-o buclă infinită, atunci când o strategie diferită ar eșua. Cea mai bună strategie de selecție este selectarea atomului care este cel mai probabil să eșueze.
+
+Algoritmul nedeterminist de sus în jos împreună cu o strategie de selecție induc un grafic de căutare, care este un arbore. Fiecare nod din graficul de căutare reprezintă o clauză de răspuns. Vecinii unui nod $ yes \leftarrow a_1 \wedge ... \wedge a_m $, unde $ a_i $ este atomul selectat, reprezintă toate clauzele de răspuns posibil obținute prin rezolvarea pe $ a_i $. Există un vecin pentru fiecare clauză definită al cărei cap este $ a_i $. Nodurile țintă ale căutării sunt de forma $ yes \leftarrow $.
+
+Graficul de căutare pentru o derivare SLD, presupunând că atomul din stânga este selectat în fiecare clauză de răspuns, este prezentat în Figura 1. Având în vedere baza de cunoștințe:
+
+\begin{tabbing}
+
+$ a\leftarrow b \wedge c. $
+\\ $ a \leftarrow g. $
+\\ $ a \leftarrow h. $
+\\ $ b \leftarrow j.	 $
+\\ $ b \leftarrow k.	 $
+\\ $ d \leftarrow m. $
+\\ $ d \leftarrow p.	 $
+\\ $ f \leftarrow m.	 $
+\\ $ f \leftarrow p. $
+\\ $ g \leftarrow m.	 $
+\\ $ g \leftarrow f.	 $
+\\ $ k \leftarrow m. $
+\\ $ h \leftarrow m.	 $
+\\ $ p. $
+\end{tabbing}
+Și interogarea:
+\begin{tabbing}
+$ ask \ a \leftarrow c \wedge d. $
+\end{tabbing}
+
+\begin{figure}
+    \centering
+    \includegraphics[ width=12cm]{sld-searchc}
+    \caption{Un grafic de căutare pentru o derivare de sus în jos.}
+    \label{fig:img1}
+\end{figure}
+
+
+\newpage
+\subsection {FUNCTIA citire}
+\begin{tabbing}
+
+1. $v[0]\leftarrow $0\\
+2.\textbf { while}(!feof(file))\\
+3. \indent $c \leftarrow $fgetc(file)\\
+4.\indent \textbf{if}(((c$ \geq $48)and (c$\leq $57)) or ((c$ \geq $97) and (c$ \leq $122)))then\\
+5.\indent \indent $d[strlen(d)] \leftarrow $c\\
+6.\indent \indent $d[strlen(d)] \leftarrow $NULL\\
+7.\indent \textbf{else}\\
+8.\indent \indent \indent \textbf{if}(strlen(d)!=0) then\\
+9.\indent \indent \indent \indent  \textbf{if}((d[0]$ \geq $97) and (d[0]$ \leq $122))then\\
+10.\indent \indent \indent \indent \indent  v[++v[0]]=d[0]\\
+11.\indent \indent \indent \indent  \textbf{if}((d[0]$ \geq $48) and (d[0]$ \leq $57))then\\
+12.\indent \indent \indent \indent \indent v[++v[0]]=atoi(d)\\
+13.\indent \indent \indent \indent  \textbf{for} $i \leftarrow $0, n, 1 execute\\
+14.\indent \indent \indent \indent \indent $d[i] \leftarrow $NULL\\
+\end{tabbing}
+
+\subsection{FUNCTIA atribuire}
+\begin{tabbing}
+1. $p \leftarrow $v+1\\
+2. $n \leftarrow $n*p\\
+3.  $p \leftarrow $p+1\\
+4.\textbf { for }$i \leftarrow $0, n, 1 execute\\
+5.\indent $baza[i].a\leftarrow $*p\\
+6.\indent $p \leftarrow $p+1\\
+7.\indent $baza[i].a\leftarrow $*p\\
+8.\indent $p \leftarrow $p+1\\
+9.\indent \textbf{for} $j \leftarrow $0,baza[i].k, 1 execute\\
+10.\indent \indent $baza[i].r[j][0]\leftarrow $*p\\
+11.\indent \indent $p \leftarrow $p+1\\
+12.\indent \indent\indent \textbf{for} $m \leftarrow $1,baza[i].k\\
+13.\indent \indent \indent \indent $ baza[i].r[j][m] \leftarrow $*p, 1 execute\\
+14.\indent \indent\indent \indent $p \leftarrow $p+1\\
+15. \textbf{for} $i \leftarrow $1,head $\rightarrow r[0]$, 1 execute\\
+16.\indent $head \rightarrow r[i] \leftarrow $p\\
+17.\indent $p \leftarrow $p+1\\
+\end{tabbing}
+
+
+\subsection {FUNCTIA creare-arbore}
+\begin{tabbing}
+1.\textbf{if} ($p!\leftarrow $NULL) then\\
+2.\indent \textbf{for} $i,sw \leftarrow $0, (i<n) and (sw==0), 1 execute\\
+3.\indent \indent \textbf{if}(r[1]==baza[i].a) then\\
+4.\indent \indent \indent $sw \leftarrow $1\\
+5.\indent \indent \indent $id \leftarrow $1\\
+6.\indent \textbf{if}(sw!=0) then\\
+7.\indent \indent \textbf{if} (baza[id].k$\ >$0) then\\
+8.\indent \indent \indent \textbf{for} $i \leftarrow $0, baza[id].k, 1 execute\\
+9.\indent \indent \indent \indent \textbf{for} $j \leftarrow $1,r[0], 1 execute\\
+10.\indent \indent \indent \indent \indent $rr[j]\leftarrow$r[j]\\
+11.\indent \indent \indent \indent $rr[0]\leftarrow $r[0]\\
+12.\indent \indent \indent \indent \textbf{for} $h \leftarrow $1,baza[id].r[i][0], 1 execute\\
+13.\indent \indent \indent \indent \indent \textbf{for} $j \leftarrow $rr[0],1,-1 execute\\
+14.\indent \indent \indent \indent \indent \indent $rr[j+1]\leftarrow $[j]\\
+15.\indent \indent \indent \indent \indent $rr[0]\leftarrow$rr[0]+1\\
+16.\indent \indent \indent \indent \textbf{for} $h \leftarrow $1,baza[id].r[i][0], 1 execute\\
+17.\indent \indent \indent \indent \indent \indent $rr[h]\leftarrow $baza[id].r[i][h]\\
+18.\indent \indent \indent \indent $p \rightarrow $$leg[i] \leftarrow $new Node\\
+19.\indent \indent \indent \indent $p \rightarrow $$leg[i] \rightarrow $$r[0] \rightarrow $rr[0]\\
+20.\indent \indent \indent \indent \textbf{for} $l \leftarrow $1,rr[0], 1 execute\\
+21.\indent \indent \indent \indent \indent $p \rightarrow $$leg[i] \rightarrow $$r[l] \leftarrow $rr[l]\\
+22.\indent \indent \indent \indent reading($p \rightarrow $leg[i], rr)\\
+23.\indent \indent \indent $p \rightarrow $$leg[baza[id].k] \leftarrow $NULL\\
+24.\indent \indent \textbf{else}\\
+25.\indent \indent \indent \textbf{if}($baza[id].k \leftarrow $0) then\\
+26.\indent \indent \indent \indent \textbf{if}($p\to $r[0]$>$0) then\\
+27.\indent \indent \indent \indent \indent \textbf{for}$j \leftarrow $1, r[0], 1 execute\\
+28.\indent \indent \indent \indent \indent \indent $r[j]\leftarrow $r[j+1]\\
+29.\indent \indent \indent \indent \indent $r[0] \leftarrow $r[0]-1\\
+30.\indent \indent \indent \indent \indent $p \to $$leg[0] \leftarrow $new Node\\
+31.\indent \indent \indent \indent \indent $p \to $$leg[0] \to $$r[0] \leftarrow $r[0]\\
+32.\indent \indent \indent \indent \indent \textbf{for}$l \leftarrow $1, r[0], 1 execute\\
+33.\indent \indent \indent \indent \indent \indent $p \to $$leg[0] \to $$r[l] \leftarrow $r[l]\\
+34.\indent \indent \indent \indent \indent $p \to $$leg[1] \leftarrow $NULL\\
+35.\indent \indent \indent \indent \indent reading($p \to $leg[0],r)\\
+36.\indent \indent \indent \indent \textbf{else}\\
+37.\indent \indent \indent \indent \indent $p \to $$leg[0] \leftarrow $NULL\\
+38.\indent \textbf{else}\\
+39.\indent \indent $p \to $$leg[0] \leftarrow $NULL\\
+\end{tabbing}
+
+\subsection {FUNCTIA de afisare}
+\begin{tabbing}
+1. \textbf{if}($p!\leftarrow $NULL) then\\
+2.\indent \textbf{if}($p \to $$r[0] \leftarrow $0) then\\
+3.\indent \indent printf("0 ")\\
+4.\indent \textbf{for}$i \leftarrow $1,$p \to $r[0], 1 execute\\
+5.\indent \indent printf("c",$p \to $r[i])\\
+6.\indent printf("b")\\
+7.\indent \textbf{if}($q! \leftarrow $NULL) then\\
+8.\indent \indent printf("(")\\
+9.\indent \indent \textbf{for}$j \leftarrow $1,$q \to $r[0], 1 execute\\
+10.\indent \indent printf("b")\\
+11.\indent \indent $q \leftarrow $p\\
+12.\indent \textbf{else}\\
+13.\indent \indent $q \leftarrow $p\\
+14.\indent \textbf{for}$i \leftarrow $$p \to $$leg[i]! \leftarrow $NULL, 1 execute\\
+15.\indent \indent display($p \to $leg[i], q)\\
+
+\end{tabbing}
+
+
+
+\section{Numarul Problemei}
+For each letter in my name I searched for the ASCII equivalent: \\
+\begin{tabbing}
+1.  \ $V \leftarrow  86\ $ \\
+2.  \ $o \leftarrow 111\ $ \\
+3.  \ $i \leftarrow 105\ $ \\
+4.  \ $c \leftarrow 99\  $ \\
+5.  \ $u  \leftarrow 117\ $\\
+6.  \ $l \leftarrow 108\ $ \\
+7.  \ $e \leftarrow 101\ $ \\
+8.  \ $s \leftarrow 115\ $ \\
+9.  \ $c \leftarrow 99\ $ \\
+10.  \ $u \leftarrow 117\ $ \\
+11.  \ $I \leftarrow 73\ $ \\
+12.  \ $o \leftarrow 111\ $ \\
+13.   \ $a \leftarrow 97\ $  \\
+14.  \ $n \leftarrow 110\ $ \\
+15.  \ $Suma \ este\leftarrow 1449\ $ \\
+16.  \ $Problema \ este \leftarrow 2\ $ \\
+\end{tabbing}
+\section{Proiectarea Aplicației}
+
+\subsubsection{Input si Output}
+Datele de intrare si de iesire se gasesc in fisierul in.txt respectiv fiserul out.txt
+
+\subsubsection{Compatibilitate}
+Tema de casa a fost realizata in sitemul de operare Windows. Compilatorul folosit este GNU GCC Compiler cu standardul C99.
+\newpage
+\begin{thebibliography}{9}
+
+\bibitem{site1}
+    \url{http://artint.info/html/ArtInt_110.html}.
+
+
+
+\end{thebibliography}
+
+\end{document}
